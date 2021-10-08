@@ -1,0 +1,17 @@
+
+
+    {% extends "header.html" %}
+
+    {% block content %}
+    <h2>Agendamento</h2>
+    <a href="evento/">
+        <button type="button"> Novo Evento</button>
+    </a>
+
+    
+    <ul>
+    {% for evento in eventos %}
+        <li>{{ evento.titulo }} - {{ evento.get_data_evento }}</li>
+    {% endfor %}
+    </ul>
+    {% endblock %}
