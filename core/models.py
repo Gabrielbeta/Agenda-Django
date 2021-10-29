@@ -34,4 +34,10 @@ class Evento(models.Model):
             return True
         else:
             return False
-        
+
+    def get_evento_acaminho(self):
+        if self.data_evento < datetime.now() + timedelta(hours=2):
+            return True
+        else:
+            return False
+

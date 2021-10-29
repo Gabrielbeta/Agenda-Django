@@ -6,6 +6,9 @@
     <a href="evento/">
         <button type="button"> Novo Evento</button>
     </a>
+    <a href="eventos_passados">
+        <button type="button">Eventos passados</button>
+    </a>
 
 
     <ul>
@@ -13,10 +16,16 @@
         <li>
             <div {% if evento.get_evento_atrasado %}
             style="color:red"             
-            {% endif %}>
+            {% endif %}
+            
+            {% if evento.get_evento_acaminho %}
+            style="color:rgb(187, 187, 42)"
+            {% endif %}
+            >
                 {{ evento.titulo }} - {{ evento.get_data_evento }} - {{ evento.get_local_evento}} 
-                ( <a href="evento/?id={{ evento.id }} ">Editar</a>
-                / <a href="evento/delete/{{ evento.id }}">Excluir</a>)
+                ( <a href="evento/?id={{ evento.id }} ">Editar</a> <!-- o "?" é importante para informar que se tratada do metodo GET-->
+                / <a href="evento/delete/{{ evento.id }}">Excluir</a>) <!-- esse evento.id está vindo do for e o .id é um chave dentro do dicionário dados {eventos:}
+                lá na viws -->
             </div>
         </li>
     {% endfor %}

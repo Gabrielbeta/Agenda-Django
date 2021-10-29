@@ -21,16 +21,19 @@ def logout_user(request):
     logout(request)
     return redirect('/')
 
+
+
 def submit_login(request):
     if request.POST:
         username = request.POST.get('username')
         password = request.POST.get('password')
-        usuario = authenticate(username=username, password=password)
+        usuario = authenticate(username=request.POST.get('username'), password=password)
         if usuario is not None:
             login(request, usuario)
             return redirect('/')
         else:
             messages.error(request, "Usuário ou senha inválido")
+           
             
     return redirect('/')
 
@@ -43,9 +46,9 @@ def submit_evento(request):
         local = request.POST.get('local')
         usuario = request.user
         id_evento = request.POST.get('id_evento')
-        if id_evento:
+        if id_evento: #se não houver id evento ele não executa
             evento = Evento.objects.get(id=id_evento)
-            if usuario ==usuario:
+            if usuario == usuario:
                 evento.titulo = titulo
                 evento.descricao = descricao
                 evento.data_evento = data_evento
@@ -74,9 +77,11 @@ def evento(request):
 def lista_eventos(request):
     usuarios = request.user
     data_atual = datetime.now() - timedelta(hours=1)
-    evento = Evento.objects.filter(usuarios=usuarios, data_evento__gt = data_atual)
+    evento = Evento.objects.filter(usuarios=usuarios, data_evento__gt=data_atual)
     dados = {'eventos': evento}
     return render(request, 'agenda.html', dados)
+
+
 
 
 login_required(login_url='/login/')
@@ -97,3 +102,11 @@ def json_lista_evento(request, id_usuario):
     usuarios = User.objects.get(id=id_usuario)
     evento = Evento.objects.filter(usuarios=usuarios).values('id', 'titulo')
     return JsonResponse(list(evento), safe=False)
+
+@login_required(login_url='/login/')
+def eventos_passados(request):
+    pessoa_que_esta_usando = request.user
+    data_agora = datetime.now() - timedelta(hours=1)
+    eventos_atrados = Evento.objects.filter(usuarios=pessoa_que_esta_usando, data_evento__lt=data_agora)
+    lista_eventos_atrasados = {'eventos_atrasados':eventos_atrados}
+    return render (request, 'events_pass.html', lista_eventos_atrasados)

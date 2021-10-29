@@ -1,0 +1,23 @@
+{% extends "header.html" %}
+
+{% block content %}
+
+<h2>Eventos atrasados</h2>
+
+    <a href="/">
+        <button type='button'>Voltar</button>
+    </a>
+
+    <ul>
+
+        {% for c in eventos_atrasados %}
+        <li>
+            {{ c.titulo }} - {{ c.get_data_evento }} - {{ c.get_local_evento}} 
+            (<a href="evento/?id={{ c.id }} ">Editar</a> <!-- o "?" é importante para informar que se tratada do metodo GET-->
+            / <a href="evento/delete/{{ c.id }}">Excluir</a>)
+        </li>
+    
+        {% endfor %}
+
+    </ul>   
+{% endblock %}
